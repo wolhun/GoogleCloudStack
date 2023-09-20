@@ -1,4 +1,3 @@
-
 name: Your Workflow Name
 
 on: push
@@ -7,9 +6,14 @@ jobs:
   your-job-name:
     runs-on: ubuntu-latest
 
-    env:
-      GCP_SA_KEY: |
-       {
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Set up Google Cloud Authentication
+    - name: Set up Google Cloud Authentication
+      env:
+        GCP_SA_KEY: {
   "type": "service_account",
   "project_id": "stable-course-265921",
   "private_key_id": "5969e4667efba4ecdd3bce244543aed1d665035f",
@@ -23,13 +27,13 @@ jobs:
   "universe_domain": "googleapis.com"
 }
 
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    # Set up Google Cloud Authentication
-    - name: Set up Google Cloud Authentication
       run: |
         echo "$GCP_SA_KEY" > service-account.json
         gcloud auth activate-service-account --key-file=service-account.json
+
+    # Your step to upload the file to Google Cloud Storage
+    - name: Upload to GCS
+      run: |
+        # Your commands to upload the file to GCS
+
+    # Any other steps you have
