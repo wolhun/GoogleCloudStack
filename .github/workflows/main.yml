@@ -1,39 +1,25 @@
-name: Your Workflow Name
+name: Deploy to Google Cloud Storage
 
-on: push
+on:
+  push:
+    branches:
+      - main  # Adjust this if you're using a different branch name
 
 jobs:
-  your-job-name:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Set up Google Cloud Authentication
     - name: Set up Google Cloud Authentication
       env:
-        GCP_SA_KEY: {
-  "type": "service_account",
-  "project_id": "stable-course-265921",
-  "private_key_id": "5969e4667efba4ecdd3bce244543aed1d665035f",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCaK22Yx1foCDVN\nKRyiiPgCK3fJGDAsgp0K0HihphUNloQ3ikQuMn3hzIC6fP6bBZ0QZ1ycOQgVis+Z\ndt48UXvbZ6EsNsRKS3MZnQlOQnJaZkukghPQEyUcSOmKaFnkgrkUkDigoR26AP+Q\nNkB5DiCL6//XYXRjOtqdYL9TnVVWbgL/zg+98M8Z2aGxEECsM/+dVs6Jg/BrMLm8\nU+zmJu18pLqNwlG6KRFjiqAGjytXBA4ZTsKtqkBhFwHZp7BISYkfJFHzZwEFA88U\ntgOZ7NF4R2KuYUKCWhdVaTNUGMBe0d5C7ynckj6KMGosDUTlSKmyTu3yTL+WCcp2\nygWNECbBAgMBAAECggEAAxXOZinLFQ4g/u/NLmV+TRDQn1oYELP2b5J3b4iy0ChM\ncg4WyjPheATPKKw6riCBIaRn4opzona6K9CIpv1cdKoQvCFGcVQsM/2EA6hpwGxe\npCakPdw8OGIvJkFrVxrUmFhAgdpnjWLaumiThrilJxescYN2QEwbtt2KRqKV5Bpc\niRGf7iz7GrU87GLwXjvMGKen3Y0FChHgUhwwR7H+l0FnwxtAMGlDboLG8DYCxhuo\nzSVgr8/lzYhpNIPZQ1tuKmQMdHFSGIassk1yyjYakZ5ox60T7l+SnOkNiHt7Dg9r\nval3af9w3XGNA1FxQq0CP/7psWk4n2kt6/ZsemF2lwKBgQDOLj/Qd35IroJeih87\nhn9ocPMVHUhB32myZNpQuwgaDtmdUwHyY8b1pjWnFAySrbEn7+/ynNT/mh2QKm+1\nVhraBEpAUCTebifL1lsJ4dR2Kn/1vxmXmIZoSD8nLxowAhkQw9VvR1el4WKQRIen\nJ8x9Z3E7pSjYCIouBkzVRsJbQwKBgQC/a+y46+TCA9Hq5inFxbvxjwMZIFL9fEac\nYHPGjHhEfxGsmVJSU0T1CYPtVeAAMJugnLJKtajryGWJUVGYIvGVRrqsIyffqrd3\nrsKbT32b3tBsoA7YNV37q1apLE/CIRgY7HezdxlwkbCUiaQmKMpdFzRspo6SndYE\npYPWOsx7qwKBgQCuqFUcpq0Oqu37Yiw1A6mYct4oy8ZzLuvd2DtsWhPx5xSHhlLG\n36kiXStkHsLL2mGRQFtWfW6eHBLhFmHNDmTuvOWdd4bT+iKyNSKny2tssnH1Xm4y\nkl2Bp3oAGpGni49qOUrr2lawSa5yIet8OWWr8d3lNfLUlt9fP60Ems13+wKBgFA/\nHEQBkCrNkyjYSFbCqCGCBJh59pCRksBnpuFrbde5NV2YAOzGP7hBvu61+2vY9MUG\nK7AqK6B8qCRC1OPkckZUGlmje0nGtZcUyjx1vICljdab2t1EshuZHoFZNC571TBN\noXi4yw9n5BDBCvF8VClmWvHZeRd514inIneiuqp1AoGAPk4T4KcQtVoIUdp3qR1M\n9sTONQ2rd8OsG2LSkQ4wLh8f8SZmUV72GL7Fybx0w8ZR/PqUYUcE6D/G0BB+Jw7L\nmlrIRBdZMRdyib8LpPplvqGgdXfVMFNkMNuShzLEOuaIcDcXKC1raD1PoGsfyE1Z\nz1lrY1opTk1SvEtURg7lr2U=\n-----END PRIVATE KEY-----\n",
-  "client_email": "cloudstack@stable-course-265921.iam.gserviceaccount.com",
-  "client_id": "116367008199243783890",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudstack%40stable-course-265921.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-}
-
+        GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
       run: |
         echo "$GCP_SA_KEY" > service-account.json
         gcloud auth activate-service-account --key-file=service-account.json
 
-    # Your step to upload the file to Google Cloud Storage
-    - name: Upload to GCS
+    - name: Upload to Google Cloud Storage
       run: |
-        # Your commands to upload the file to GCS
-
-    # Any other steps you have
+        gsutil cp -r ./ gs://business-news-blog/
