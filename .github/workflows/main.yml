@@ -1,7 +1,6 @@
 name: Your Workflow Name
 
-on:
-  # Your triggers (e.g., push, pull_request, etc.)
+on: push
 
 jobs:
   your-job-name:
