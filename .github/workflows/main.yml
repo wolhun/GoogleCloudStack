@@ -17,6 +17,6 @@ jobs:
       uses: google-github-actions/upload-cloud-storage@v0.5.0
       with:
         path: ./  # This will select all files in the root of the repository
-        destination: gs://business-news-blog/  # This will place files at the root of the bucket
+        destination: business-news-blog/  # This will place files at the root of the bucket
       env:
         GCS_SA_KEY: ${{ secrets.GCS_SA_KEY }}
